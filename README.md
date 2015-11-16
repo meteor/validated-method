@@ -11,9 +11,10 @@ by a magic string name
 method
 6. Get the return value of the stub by default, to take advantage of consistent ID generation
 
-Ideas for other features:
+Todos:
 
-1. Get a promise when calling the method
+1. Allow passing options
+2. Add mixin support for simple:rest and similar
 
 ### Defining a method
 
