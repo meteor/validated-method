@@ -89,6 +89,7 @@ const method = new Method({
     }
   }
 });
+```
 
 ### Using a Method
 
