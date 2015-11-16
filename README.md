@@ -18,6 +18,8 @@ Todos:
 
 ### Defining a method
 
+#### new Method({ name, schema, run })
+
 Code pulled from the Todos example app:
 
 ```js
@@ -59,6 +61,8 @@ Lists.methods.makePrivate = new Method({
   }
 });
 ```
+
+#### new Method({ name, validate, run })
 
 If `aldeed:simple-schema` doesn't work for your validation needs, just define a custom `validate`
 method that throws a `Meteor.ValidationError` instead:
