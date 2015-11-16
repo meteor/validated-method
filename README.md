@@ -165,7 +165,7 @@ it('only makes the list public if you made it private', () => {
 
 ### Discussion and in-depth info
 
-#### ID generation
+#### ID generation and returnStubValue
 
 One big benefit of the built-in client-side `Collection#insert` call is that you can get the ID of
 the newly inserted document on the client right away. This is sometimes listed as a benefit of
