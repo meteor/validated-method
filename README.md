@@ -21,10 +21,10 @@ declaring methods using this package:
 by a magic string name
 2. Built-in validation of arguments through `aldeed:simple-schema`
 4. Easily call your method from tests or server-side code, passing in any user ID you want. No need for [two-tiered methods](https://www.discovermeteor.com/blog/meteor-pattern-two-tiered-methods/) anymore!
-5. Throw errors from the client-side method simulation to prevent execution of the server-side
+5. [Throw errors from the client-side method simulation](#Validation-and-throwStubExceptions) to prevent execution of the server-side
 method - this means you can do complex client-side validation in the body on the client, and not
 waste server-side resources.
-6. Get the return value of the stub by default, to take advantage of [consistent ID generation](#id-generation). This
+6. Get the return value of the stub by default, to take advantage of [consistent ID generation](#id-generation-and-returnstubvalue). This
 way you can implement a custom insert method with optimistic UI.
 
 Todos:
@@ -164,6 +164,16 @@ it('only makes the list public if you made it private', () => {
 - With a little bit of work, this package could be improved to allow easily generating a form from a method, based on the arguments it takes. We just need a way of specifying some of the arguments programmatically - for example, if you want to make a form to add a comment to a post, you need to pass the post ID somehow - you don't want to just have a text field called "Post ID".
 
 ### Discussion and in-depth info
+
+#### Validation and throwStubExceptions
+
+By default, using `Meteor.call` to call a Meteor method invokes the client-side simulation and the server-side implementation. If the simulation fails or throws an error, the server-side implementation happens anyway. However, we believe that it is likely that an error in the simulation is a good indicator that an error will happen on the server as well. For example, if there is a validation error in the arguments, or the user doesn't have adequate permissions to call that method, it's often easy to identify that ahead of time on the client.
+
+If you already know the method will fail, why call it on the server at all? That's why this package turns on a [hidden option](https://forums.meteor.com/t/exception-handling-best-practices/4301) to `Meteor.apply` called `throwStubExceptions`.
+
+With this option enabled, an error thrown by the client simulation will stop the server-side method from being called at all.
+
+Watch out - while this behavior is good for conserving server resources in the case where you know the call will fail, you need to make sure the simulation doesn't throw errors in the case where the server call would have succeeded. This means that if you have some permission logic that relies on data only available on the server, you should wrap it in an `if (!this.isSimulation) { ... }` statement.
 
 #### ID generation and returnStubValue
 
