@@ -1,6 +1,9 @@
 # mdg:method
 
-A simple wrapper package for `Meteor.methods` with many benefits:
+A simple wrapper package for `Meteor.methods` with many benefits. The need for such a package came
+when the Meteor Guide was being written and we realized there was a lot of best-practices
+boilerplate around methods that could be easily abstracted away. Here are some of the advantages of
+declaring methods using this package:
 
 1. Have an object that represents your method. Refer to it through JavaScript scope rather than
 by a magic string name
