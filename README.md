@@ -21,7 +21,7 @@ declaring methods using this package:
 by a magic string name
 2. Built-in validation of arguments through `aldeed:simple-schema`
 4. Easily call your method from tests or server-side code, passing in any user ID you want. No need for [two-tiered methods](https://www.discovermeteor.com/blog/meteor-pattern-two-tiered-methods/) anymore!
-5. [Throw errors from the client-side method simulation](#Validation-and-throwStubExceptions) to prevent execution of the server-side
+5. [Throw errors from the client-side method simulation](#validation-and-throwstubexceptions) to prevent execution of the server-side
 method - this means you can do complex client-side validation in the body on the client, and not
 waste server-side resources.
 6. Get the return value of the stub by default, to take advantage of [consistent ID generation](#id-generation-and-returnstubvalue). This
