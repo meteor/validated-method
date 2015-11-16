@@ -89,3 +89,62 @@ const method = new Method({
     }
   }
 });
+
+### Using a Method
+
+#### method#call(args: Object)
+
+Call a method like so:
+
+```js
+Lists.methods.makePrivate.call({
+  listId: list._id
+}, (err, res) => {
+  if (err) {
+    handleError(err.error);
+  }
+
+  doSomethingWithResult(res);
+});
+```
+
+The return value of the server-side method is available as the second argument of the method
+callback. If your method stub returns a value, you can get it by reading the return value of `call`:
+
+```js
+// The return value of the stub is an ID generated on the client
+const listId = Lists.methods.insert.call((err) => {
+  if (err) {
+    // At this point, we have already redirected to the new list page, but
+    // for some reason the list didn't get created. This should almost never
+    // happen, but it's good to handle it anyway.
+    FlowRouter.go('home');
+    alert('Could not create list.');
+  }
+});
+
+FlowRouter.go('listsShow', { _id: listId });
+```
+
+#### method#_execute(context: Object, args: Object)
+
+Call this from your test code to simulate calling a method on behalf of a particular user:
+
+```js
+it('only makes the list public if you made it private', () => {
+  // Set up method arguments and context
+  const context = { userId };
+  const args = { listId };
+
+  Lists.methods.makePrivate._execute(context, args);
+
+  const otherUserContext = { userId: Random.id() };
+
+  assert.throws(() => {
+    Lists.methods.makePublic._execute(otherUserContext, args);
+  }, Meteor.Error, /Lists.methods.makePublic.accessDenied/);
+
+  // Make sure things are still private
+  assertListAndTodoArePrivate();
+});
+```
