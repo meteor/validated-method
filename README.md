@@ -44,7 +44,7 @@ See extensive code samples in the Todos example app below:
 
 #### new Method({ name, schema, run })
 
-Code pulled from the Todos example app:
+Let's examine a method from the new [Todos example app](https://github.com/meteor/todos/blob/b890fc2ac8846051031370035421893fa4145b86/packages/lists/methods.js#L17) which makes a list private and takes the `listId` as an argument. The method also does permissions checks based on the currently logged-in user. Note this code uses new [ES2015 JavaScript syntax features](http://info.meteor.com/blog/es2015-get-started).
 
 ```js
 // Attach your method to a namespace
