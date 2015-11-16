@@ -16,6 +16,7 @@ method
 
 Todos:
 
+1. Figure out how to get ValidationError in here
 1. Allow passing options
 2. Add mixin support for simple:rest and similar
 
