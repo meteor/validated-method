@@ -2,7 +2,17 @@
 
 > Development stage: looking for feedback and ideas before solidifying the initial API
 
-A simple wrapper package for `Meteor.methods` with many benefits. The need for such a package came
+### Define Meteor methods in a structured way
+
+```js
+const method = new Method({
+  name, // DDP method name
+  schema, // SimpleSchema for arguments
+  run // method body
+});
+```
+
+This is a simple wrapper package for `Meteor.methods`. The need for such a package came
 when the Meteor Guide was being written and we realized there was a lot of best-practices
 boilerplate around methods that could be easily abstracted away. Here are some of the advantages of
 declaring methods using this package:
