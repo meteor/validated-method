@@ -26,7 +26,7 @@ See extensive code samples in the Todos example app below:
 
 1. [Todos](https://github.com/meteor/todos/blob/master/packages/todos/methods.js) and [Lists](https://github.com/meteor/todos/blob/master/packages/lists/methods.js) method definitions
 2. [Lists method tests](https://github.com/meteor/todos/blob/b890fc2ac8846051031370035421893fa4145b86/packages/lists/lists-tests.js#L55)
-3. Some call sites: (1)[https://github.com/meteor/todos/blob/b890fc2ac8846051031370035421893fa4145b86/packages/lists-show/lists-show.js#L19], (2)[https://github.com/meteor/todos/blob/b890fc2ac8846051031370035421893fa4145b86/packages/lists-show/lists-show.js#L63], (3)[https://github.com/meteor/todos/blob/b890fc2ac8846051031370035421893fa4145b86/packages/todos-main/app-body.js#L108]
+3. Some call sites: [1](https://github.com/meteor/todos/blob/b890fc2ac8846051031370035421893fa4145b86/packages/lists-show/lists-show.js#L19), [2](https://github.com/meteor/todos/blob/b890fc2ac8846051031370035421893fa4145b86/packages/lists-show/lists-show.js#L63), [3](https://github.com/meteor/todos/blob/b890fc2ac8846051031370035421893fa4145b86/packages/todos-main/app-body.js#L108)
 
 
 ### Defining a method
