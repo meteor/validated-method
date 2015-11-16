@@ -1,11 +1,6 @@
 /* global Method:true */
 /* global SimpleSchema ValidationError */
 
-// TODO
-// 1. Need a way to share data between authorize and run, in case you need to
-// load a particular document
-// 2. Need to figure out how the client stub should behave when error is thrown
-
 Method = class Method {
   constructor({
     name,
