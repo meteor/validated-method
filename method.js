@@ -90,6 +90,15 @@ function validateAgainstSimpleSchema(obj, ss) {
     return;
   }
 
-  const {name, type, value} = validationContext.invalidKeys();
-  throw new ValidationError({name, type, details: {value}});
+  const errors = validationContext.invalidKeys().map((error) => {
+    return {
+      name: error.name,
+      type: error.type,
+      details: {
+        value: error.value
+      }
+    };
+  });
+
+  throw new ValidationError(errors);
 }

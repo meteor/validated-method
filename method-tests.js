@@ -31,12 +31,16 @@ describe('mdg:method', () => {
 
   it('checks schema', (done) => {
     methodWithArgs.call({}, (error, result) => {
-      // Never runs
-      console.log(error, result);
-      assert.equal(result, 'result');
+      // 2 invalid fields
+      assert.equal(error.details.length, 2);
 
-      Meteor.call(methodWithArgs.name, {}, (error, result) => {
+      methodWithArgs.call({
+        int: 5,
+        string: "what",
+      }, (error, result) => {
+        // All good!
         assert.equal(result, 'result');
+
         done();
       });
     });
