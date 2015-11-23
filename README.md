@@ -54,7 +54,9 @@ Lists.methods.makePrivate = new Method({
   name: 'Lists.methods.makePrivate',
 
   // Schema for the arguments. Only keyword arguments are accepted, so the
-  // arguments are an object rather than an array
+  // arguments are an object rather than an array. Method throws a
+  // ValidationError from the mdg:validation-error package if the args don't
+  // match the schema
   schema: new SimpleSchema({
     listId: { type: String }
   }),
@@ -89,7 +91,7 @@ Lists.methods.makePrivate = new Method({
 #### new Method({ name, validate, run })
 
 If `aldeed:simple-schema` doesn't work for your validation needs, just define a custom `validate`
-method that throws a `Meteor.ValidationError` instead:
+method that throws a [`Meteor.ValidationError`](https://github.com/meteor/validation-error) instead:
 
 ```js
 const method = new Method({
