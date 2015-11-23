@@ -14,7 +14,7 @@ Package.onUse(function (api) {
     'ddp',
     'underscore',
     'aldeed:simple-schema',
-    'validation-error'
+    'mdg:validation-error@0.1.0'
   ]);
 
   api.addFiles('method.js');
@@ -24,8 +24,11 @@ Package.onUse(function (api) {
 Package.onTest(function (api) {
   api.use([
     'ecmascript',
-    'tinytest',
-    'method'
+    'practicalmeteor:mocha@2.1.0_5',
+    'practicalmeteor:chai@2.1.0_1',
+    'aldeed:simple-schema',
+    'method',
+    'random'
   ]);
 
   api.addFiles('method-tests.js');
