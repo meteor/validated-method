@@ -211,3 +211,9 @@ const listId = Lists.methods.insert.call((err) => {
 
 FlowRouter.go('listsShow', { _id: listId });
 ```
+
+### Running tests
+
+```
+meteor test-packages --driver-package practicalmeteor:mocha ./
+```
