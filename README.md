@@ -5,11 +5,15 @@
 ### Define Meteor methods in a structured way
 
 ```js
+// Method definition
 const method = new Method({
   name, // DDP method name
   schema, // SimpleSchema for arguments
   run // method body
 });
+
+// Method call
+method.call({ arg1, arg2 });
 ```
 
 This is a simple wrapper package for `Meteor.methods`. The need for such a package came
