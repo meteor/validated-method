@@ -27,12 +27,6 @@ waste server-side resources.
 6. Get the return value of the stub by default, to take advantage of [consistent ID generation](#id-generation-and-returnstubvalue). This
 way you can implement a custom insert method with optimistic UI.
 
-Todos:
-
-1. Figure out how to get ValidationError in here
-1. Allow passing options
-2. Add mixin support for simple:rest and similar
-
 See extensive code samples in the Todos example app below:
 
 1. [Todos](https://github.com/meteor/todos/blob/master/packages/todos/methods.js) and [Lists](https://github.com/meteor/todos/blob/master/packages/lists/methods.js) method definitions
