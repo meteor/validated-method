@@ -1,18 +1,22 @@
+const methodName = 'method';
+
+const method = new Method({
+  name: methodName,
+  schema: new SimpleSchema({}),
+  run() {
+    return 'result';
+  }
+});
+
 describe('mdg:method', () => {
   it('defines a method that can be called', (done) => {
-    const methodName = 'x';//Random.id();
+    method.call({}, (error, result) => {
+      assert.equal(result, 'result');
 
-    const method = new Method({
-      name: methodName,
-      schema: new SimpleSchema({}),
-      run() {
-        return 'result';
-      }
+      Meteor.call(methodName, {}, (error, result) => {
+        assert.equal(result, 'result');
+        done();
+      });
     });
-
-    assert.equal(method.call({}), 'result');
-    // Meteor.call(methodName, {}, (result) => {
-    //   assert.equal(result, 'result');
-    // });
   });
 });
