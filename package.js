@@ -13,7 +13,7 @@ Package.onUse(function (api) {
     'check',
     'ddp',
     'underscore',
-    'aldeed:simple-schema',
+    'aldeed:simple-schema@1.3.3',
     'mdg:validation-error@0.1.0'
   ]);
 
@@ -26,7 +26,7 @@ Package.onTest(function (api) {
     'ecmascript',
     'practicalmeteor:mocha@2.1.0_5',
     'practicalmeteor:chai@2.1.0_1',
-    'aldeed:simple-schema',
+    'aldeed:simple-schema@1.3.3',
     'mdg:method',
     'random'
   ]);
