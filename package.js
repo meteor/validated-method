@@ -1,5 +1,5 @@
 Package.describe({
-  name: 'method',
+  name: 'mdg:method',
   summary: 'A simple wrapper for Meteor.methods',
   version: '0.1.0',
   documentation: 'README.md',
@@ -27,7 +27,7 @@ Package.onTest(function (api) {
     'practicalmeteor:mocha@2.1.0_5',
     'practicalmeteor:chai@2.1.0_1',
     'aldeed:simple-schema',
-    'method',
+    'mdg:method',
     'random'
   ]);
 
