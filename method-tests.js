@@ -32,7 +32,7 @@ describe('mdg:method', () => {
   it('checks schema', (done) => {
     methodWithArgs.call({}, (error, result) => {
       // 2 invalid fields
-      assert.equal(error.details.length, 2);
+      assert.equal(error.errors.length, 2);
 
       methodWithArgs.call({
         int: 5,
