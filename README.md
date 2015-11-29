@@ -23,12 +23,12 @@ declaring methods using this package:
 
 1. Have an object that represents your method. Refer to it through JavaScript scope rather than
 by a magic string name
-2. Built-in validation of arguments through `aldeed:simple-schema`
-4. Easily call your method from tests or server-side code, passing in any user ID you want. No need for [two-tiered methods](https://www.discovermeteor.com/blog/meteor-pattern-two-tiered-methods/) anymore!
-5. [Throw errors from the client-side method simulation](#validation-and-throwstubexceptions) to prevent execution of the server-side
+1. Built-in validation of arguments through `aldeed:simple-schema`, or roll your own argument validation.
+1. Easily call your method from tests or server-side code, passing in any user ID you want. No need for [two-tiered methods](https://www.discovermeteor.com/blog/meteor-pattern-two-tiered-methods/) anymore!
+1. [Throw errors from the client-side method simulation](#validation-and-throwstubexceptions) to prevent execution of the server-side
 method - this means you can do complex client-side validation in the body on the client, and not
 waste server-side resources.
-6. Get the return value of the stub by default, to take advantage of [consistent ID generation](#id-generation-and-returnstubvalue). This
+1. Get the return value of the stub by default, to take advantage of [consistent ID generation](#id-generation-and-returnstubvalue). This
 way you can implement a custom insert method with optimistic UI.
 
 See extensive code samples in the Todos example app below:
@@ -89,7 +89,7 @@ Lists.methods.makePrivate = new Method({
 #### new Method({ name, validate, run })
 
 If `aldeed:simple-schema` doesn't work for your validation needs, just define a custom `validate`
-method that throws a [`Meteor.ValidationError`](https://github.com/meteor/validation-error) instead:
+method that throws a [`ValidationError`](https://github.com/meteor/validation-error) instead:
 
 ```js
 const method = new Method({
@@ -109,7 +109,7 @@ const method = new Method({
     }
 
     if (errors.length) {
-      throw new Meteor.ValidationError(errors);
+      throw new ValidationError(errors);
     }
   }
 });
