@@ -1,29 +1,18 @@
 /* global Method:true */
-/* global SimpleSchema ValidationError */
 
 Method = class Method {
   constructor({
     name,
-    schema,
     validate,
     run,
   }) {
     check(name, String);
-    check(schema, Match.Optional(SimpleSchema));
+    check(run, Function);
 
-    if (schema) {
-      if (validate) {
-        // Make sure people don't pass schema and validate
-        throw new Error('Validate is overriden by schema.');
-      }
-
-      validate = (args) => {
-        validateAgainstSimpleSchema(args, schema);
-      };
-    }
+    // Allow validate: null shorthand for methods that take no arguments
+    if (validate === null) validate = function () {};
 
     check(validate, Function);
-    check(run, Function);
 
     _.extend(this, {
       name,
@@ -34,8 +23,7 @@ Method = class Method {
     const method = this;
     Meteor.methods({
       [name](args) {
-        // Silence audit-argument-checks since arguments are always checked when using this package,
-        // we just use SimpleSchema instead of check
+        // Silence audit-argument-checks since arguments are always checked when using this package
         check(args, Match.Any);
         const methodInvocation = this;
         return method._execute(methodInvocation, args);
@@ -80,25 +68,3 @@ perhaps you meant to throw an error?`);
     return this.run.bind(methodInvocation)(args);
   }
 };
-
-function validateAgainstSimpleSchema(obj, ss) {
-  const validationContext = ss.newContext();
-  const isValid = validationContext.validate(obj);
-
-  if (isValid) {
-    // All good!
-    return;
-  }
-
-  const errors = validationContext.invalidKeys().map((error) => {
-    return {
-      name: error.name,
-      type: error.type,
-      details: {
-        value: error.value
-      }
-    };
-  });
-
-  throw new ValidationError(errors);
-}
