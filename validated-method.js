@@ -1,10 +1,11 @@
-/* global Method:true */
+/* global ValidatedMethod:true */
 
-Method = class Method {
+ValidatedMethod = class ValidatedMethod {
   constructor({
     name,
     validate,
     run,
+    connection = Meteor
   }) {
     check(name, String);
     check(run, Function);
@@ -18,10 +19,11 @@ Method = class Method {
       name,
       validate,
       run,
+      connection
     });
 
     const method = this;
-    Meteor.methods({
+    this.connection.methods({
       [name](args) {
         // Silence audit-argument-checks since arguments are always checked when using this package
         check(args, Match.Any);
@@ -50,7 +52,7 @@ Method = class Method {
     };
 
     try {
-      return Meteor.apply(this.name, [args], options, callback);
+      return this.connection.apply(this.name, [args], options, callback);
     } catch (err) {
       // Get errors from the stub in the same way as from the server-side method
       callback(err);
