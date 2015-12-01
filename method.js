@@ -1,5 +1,4 @@
 /* global Method:true */
-/* global SimpleSchema ValidationError */
 
 Method = class Method {
   constructor({
@@ -9,7 +8,6 @@ Method = class Method {
     run,
   }) {
     check(name, String);
-    check(schema, Match.Optional(SimpleSchema));
 
     if (schema) {
       if (validate) {
@@ -17,10 +15,15 @@ Method = class Method {
         throw new Error('Validate is overriden by schema.');
       }
 
-      validate = (args) => {
-        validateAgainstSimpleSchema(args, schema);
-      };
+      if (typeof schema.validator !== 'function') {
+        throw new Error('schema option must be set to an object with "validator" function property');
+      }
+
+      validate = schema.validator();
     }
+
+    // Allow validate: true shorthand for methods that take no arguments
+    if (validate === true) validate = function () {};
 
     check(validate, Function);
     check(run, Function);
@@ -80,25 +83,3 @@ perhaps you meant to throw an error?`);
     return this.run.bind(methodInvocation)(args);
   }
 };
-
-function validateAgainstSimpleSchema(obj, ss) {
-  const validationContext = ss.newContext();
-  const isValid = validationContext.validate(obj);
-
-  if (isValid) {
-    // All good!
-    return;
-  }
-
-  const errors = validationContext.invalidKeys().map((error) => {
-    return {
-      name: error.name,
-      type: error.type,
-      details: {
-        value: error.value
-      }
-    };
-  });
-
-  throw new ValidationError(errors);
-}

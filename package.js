@@ -13,8 +13,6 @@ Package.onUse(function (api) {
     'check',
     'ddp',
     'underscore',
-    'aldeed:simple-schema@1.3.3',
-    'mdg:validation-error@0.1.0'
   ]);
 
   api.addFiles('method.js');
@@ -26,7 +24,7 @@ Package.onTest(function (api) {
     'ecmascript',
     'practicalmeteor:mocha@2.1.0_5',
     'practicalmeteor:chai@2.1.0_1',
-    'aldeed:simple-schema@1.3.3',
+    'aldeed:simple-schema@1.4.0',
     'mdg:method',
     'random'
   ]);

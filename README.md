@@ -86,6 +86,8 @@ Lists.methods.makePrivate = new Method({
 });
 ```
 
+The `schema` option can be set to any object that has a `validator` function which, when called with no arguments, returns a validation function to use as the `validate` option (see below). SimpleSchema version 1.4+ has such a function.
+
 #### new Method({ name, validate, run })
 
 If `aldeed:simple-schema` doesn't work for your validation needs, just define a custom `validate`
@@ -114,6 +116,10 @@ const method = new Method({
   }
 });
 ```
+
+#### Skipping argument validation
+
+If your method does not need argument validation, perhaps because it does not take any arguments, you can use `validate: true` to skip argument validation.
 
 ### Using a Method
 

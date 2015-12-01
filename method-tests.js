@@ -6,6 +6,14 @@ const plainMethod = new Method({
   }
 });
 
+const noArgsMethod = new Method({
+  name: 'noArgsMethod',
+  validate: true,
+  run() {
+    return 'result';
+  }
+});
+
 const methodWithArgs = new Method({
   name: 'methodWithArgs',
   schema: new SimpleSchema({
@@ -23,6 +31,17 @@ describe('mdg:method', () => {
       assert.equal(result, 'result');
 
       Meteor.call(plainMethod.name, {}, (error, result) => {
+        assert.equal(result, 'result');
+        done();
+      });
+    });
+  });
+
+  it('allows methods that take no arguments', (done) => {
+    noArgsMethod.call((error, result) => {
+      assert.equal(result, 'result');
+
+      Meteor.call(noArgsMethod.name, (error, result) => {
         assert.equal(result, 'result');
         done();
       });
