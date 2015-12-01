@@ -1,4 +1,4 @@
-const plainMethod = new Method({
+const plainMethod = new ValidatedMethod({
   name: 'plainMethod',
   validate: new SimpleSchema({}).validator(),
   run() {
@@ -6,7 +6,7 @@ const plainMethod = new Method({
   }
 });
 
-const noArgsMethod = new Method({
+const noArgsMethod = new ValidatedMethod({
   name: 'noArgsMethod',
   validate: null,
   run() {
@@ -14,7 +14,7 @@ const noArgsMethod = new Method({
   }
 });
 
-const methodWithArgs = new Method({
+const methodWithArgs = new ValidatedMethod({
   name: 'methodWithArgs',
   validate: new SimpleSchema({
     int: { type: Number },

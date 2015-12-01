@@ -1,7 +1,7 @@
 Package.describe({
-  name: 'mdg:method',
+  name: 'mdg:validated-method',
   summary: 'A simple wrapper for Meteor.methods',
-  version: '0.1.0',
+  version: '0.2.0',
   documentation: 'README.md',
 });
 
@@ -15,8 +15,8 @@ Package.onUse(function (api) {
     'underscore',
   ]);
 
-  api.addFiles('method.js');
-  api.export('Method');
+  api.addFiles('validated-method.js');
+  api.export('ValidatedMethod');
 });
 
 Package.onTest(function (api) {
@@ -25,9 +25,9 @@ Package.onTest(function (api) {
     'practicalmeteor:mocha@2.1.0_5',
     'practicalmeteor:chai@2.1.0_1',
     'aldeed:simple-schema@1.4.0',
-    'mdg:method',
+    'mdg:validated-method',
     'random'
   ]);
 
-  api.addFiles('method-tests.js');
+  api.addFiles('validated-method-tests.js');
 });

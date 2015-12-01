@@ -1,4 +1,4 @@
-# mdg:method
+# mdg:validated-method
 
 > Development stage: looking for feedback and ideas before solidifying the initial API
 
@@ -6,7 +6,7 @@
 
 ```js
 // Method definition
-const method = new Method({
+const method = new ValidatedMethod({
   name, // DDP method name
   validation, // argument validation
   run // method body
@@ -46,13 +46,13 @@ Let's examine a method from the new [Todos example app](https://github.com/meteo
 
 ```js
 // Attach your method to a namespace
-Lists.methods.makePrivate = new Method({
+Lists.methods.makePrivate = new ValidatedMethod({
   // The name of the method, sent over the wire. Same as the key provided
   // when calling Meteor.methods
   name: 'Lists.methods.makePrivate',
 
   // Schema for the arguments. Only keyword arguments are accepted, so the
-  // arguments are an object rather than an array. Method throws a
+  // arguments are an object rather than an array. ValidatedMethod throws a
   // ValidationError from the mdg:validation-error package if the args don't
   // match the schema
   validate: new SimpleSchema({
@@ -94,7 +94,7 @@ If `aldeed:simple-schema` doesn't work for your validation needs, just define a 
 method that throws a [`ValidationError`](https://github.com/meteor/validation-error) instead:
 
 ```js
-const method = new Method({
+const method = new ValidatedMethod({
   name: 'methodName',
 
   validate({ myArgument }) {
@@ -121,7 +121,11 @@ const method = new Method({
 
 If your method does not need argument validation, perhaps because it does not take any arguments, you can use `validate: null` to skip argument validation.
 
-### Using a Method
+#### Defining a method on a non-default connection
+
+You can define a method on a non-default DDP connection by passing an extra `connection` option to the constructor.
+
+### Using a ValidatedMethod
 
 #### method#call(args: Object)
 
@@ -192,7 +196,7 @@ For a while now, Meteor has had a [hard-to-find](https://forums.meteor.com/t/how
 Here's an example of how you could implement a custom insert method, taken from the [Todos example app](https://github.com/meteor/todos/blob/master/packages/lists/methods.js) we are working on for the Meteor Guide:
 
 ```js
-Lists.methods.insert = new Method({
+Lists.methods.insert = new ValidatedMethod({
   name: 'Lists.methods.insert',
   validate: new SimpleSchema({}).validator(),
   run() {
