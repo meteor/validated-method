@@ -1,6 +1,6 @@
 const plainMethod = new Method({
   name: 'plainMethod',
-  schema: new SimpleSchema({}),
+  validate: new SimpleSchema({}).validator(),
   run() {
     return 'result';
   }
@@ -8,7 +8,7 @@ const plainMethod = new Method({
 
 const noArgsMethod = new Method({
   name: 'noArgsMethod',
-  validate: true,
+  validate: null,
   run() {
     return 'result';
   }
@@ -16,10 +16,10 @@ const noArgsMethod = new Method({
 
 const methodWithArgs = new Method({
   name: 'methodWithArgs',
-  schema: new SimpleSchema({
+  validate: new SimpleSchema({
     int: { type: Number },
     string: { type: String },
-  }),
+  }).validator(),
   run() {
     return 'result';
   }

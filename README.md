@@ -8,7 +8,7 @@
 // Method definition
 const method = new Method({
   name, // DDP method name
-  schema, // SimpleSchema for arguments
+  validation, // argument validation
   run // method body
 });
 
@@ -40,7 +40,7 @@ See extensive code samples in the Todos example app below:
 
 ### Defining a method
 
-#### new Method({ name, schema, run })
+#### Using SimpleSchema
 
 Let's examine a method from the new [Todos example app](https://github.com/meteor/todos/blob/b890fc2ac8846051031370035421893fa4145b86/packages/lists/methods.js#L17) which makes a list private and takes the `listId` as an argument. The method also does permissions checks based on the currently logged-in user. Note this code uses new [ES2015 JavaScript syntax features](http://info.meteor.com/blog/es2015-get-started).
 
@@ -55,9 +55,9 @@ Lists.methods.makePrivate = new Method({
   // arguments are an object rather than an array. Method throws a
   // ValidationError from the mdg:validation-error package if the args don't
   // match the schema
-  schema: new SimpleSchema({
+  validate: new SimpleSchema({
     listId: { type: String }
-  }),
+  }).validator(),
 
   // This is the body of the method. Use ES2015 object destructuring to get
   // the keyword arguments
@@ -86,9 +86,9 @@ Lists.methods.makePrivate = new Method({
 });
 ```
 
-The `schema` option can be set to any object that has a `validator` function which, when called with no arguments, returns a validation function to use as the `validate` option (see below). SimpleSchema version 1.4+ has such a function.
+The `validator` function called in the example requires SimpleSchema version 1.4+.
 
-#### new Method({ name, validate, run })
+#### Using your own argument validation function
 
 If `aldeed:simple-schema` doesn't work for your validation needs, just define a custom `validate`
 method that throws a [`ValidationError`](https://github.com/meteor/validation-error) instead:
@@ -119,7 +119,7 @@ const method = new Method({
 
 #### Skipping argument validation
 
-If your method does not need argument validation, perhaps because it does not take any arguments, you can use `validate: true` to skip argument validation.
+If your method does not need argument validation, perhaps because it does not take any arguments, you can use `validate: null` to skip argument validation.
 
 ### Using a Method
 
@@ -194,7 +194,7 @@ Here's an example of how you could implement a custom insert method, taken from 
 ```js
 Lists.methods.insert = new Method({
   name: 'Lists.methods.insert',
-  schema: new SimpleSchema({}),
+  validate: new SimpleSchema({}).validator(),
   run() {
     return Lists.insert({});
   }
