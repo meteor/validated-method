@@ -51,9 +51,9 @@ Lists.methods.makePrivate = new ValidatedMethod({
   // when calling Meteor.methods
   name: 'Lists.methods.makePrivate',
 
-  // Schema for the arguments. Only keyword arguments are accepted, so the
-  // arguments are an object rather than an array. ValidatedMethod throws a
-  // ValidationError from the mdg:validation-error package if the args don't
+  // Validation function for the arguments. Only keyword arguments are accepted,
+  // so the arguments are an object rather than an array. The SimpleSchema validator
+  // throws a ValidationError from the mdg:validation-error package if the args don't
   // match the schema
   validate: new SimpleSchema({
     listId: { type: String }
@@ -113,7 +113,25 @@ const method = new ValidatedMethod({
     if (errors.length) {
       throw new ValidationError(errors);
     }
-  }
+  },
+
+  ...
+});
+```
+
+#### Using `check` to validate arguments
+
+You can use `check` in your validate function if you don't want to pass `ValidationError` objects to the client, like so:
+
+```js
+const method = new ValidatedMethod({
+  name: 'methodName',
+
+  validate({ myArgument }) {
+    check(myArgument, String);
+  },
+
+  ...
 });
 ```
 
@@ -171,7 +189,7 @@ it('only makes the list public if you made it private', () => {
 
 ### Ideas
 
-- With a little bit of work, this package could be improved to allow easily generating a form from a method, based on the arguments it takes. We just need a way of specifying some of the arguments programmatically - for example, if you want to make a form to add a comment to a post, you need to pass the post ID somehow - you don't want to just have a text field called "Post ID".
+- With a little bit of work, this package could be improved to allow easily generating a form from a method, based on the schema of the arguments it takes. We just need a way of specifying some of the arguments programmatically - for example, if you want to make a form to add a comment to a post, you need to pass the post ID somehow - you don't want to just have a text field called "Post ID".
 
 ### Discussion and in-depth info
 
