@@ -1,7 +1,5 @@
 # mdg:validated-method
 
-> Development stage: looking for feedback and ideas before solidifying the initial API
-
 ### Define Meteor methods in a structured way
 
 ```js
