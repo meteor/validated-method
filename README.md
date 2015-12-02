@@ -127,8 +127,10 @@ You can use `check` in your validate function if you don't want to pass `Validat
 const method = new ValidatedMethod({
   name: 'methodName',
 
-  validate({ myArgument }) {
-    check(myArgument, String);
+  validate(args) {
+    check(args, {
+      myArgument: String
+    });
   },
 
   ...
@@ -189,6 +191,7 @@ it('only makes the list public if you made it private', () => {
 
 ### Ideas
 
+- It could be nice to have a `SimpleSchemaMethod` which just lets you specify a `schema` option rather than having to pass a `validator` function into the `validate` option. This would enable the below.
 - With a little bit of work, this package could be improved to allow easily generating a form from a method, based on the schema of the arguments it takes. We just need a way of specifying some of the arguments programmatically - for example, if you want to make a form to add a comment to a post, you need to pass the post ID somehow - you don't want to just have a text field called "Post ID".
 
 ### Discussion and in-depth info
