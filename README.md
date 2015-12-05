@@ -6,7 +6,7 @@
 // Method definition
 const method = new ValidatedMethod({
   name, // DDP method name
-  validation, // argument validation
+  validate, // argument validation
   run // method body
 });
 
