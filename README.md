@@ -1,4 +1,4 @@
-# mdg:validated-method
+# mdg:method
 
 ### Define Meteor methods in a structured way
 
@@ -44,7 +44,7 @@ Let's examine a method from the new [Todos example app](https://github.com/meteo
 
 ```js
 // Attach your method to a namespace
-Lists.methods.makePrivate = new ValidatedMethod({
+Lists.methods.makePrivate = new Method({
   // The name of the method, sent over the wire. Same as the key provided
   // when calling Meteor.methods
   name: 'Lists.methods.makePrivate',
