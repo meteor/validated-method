@@ -1,5 +1,9 @@
 # Change log
 
+## 0.2.1
+
+- Throw errors if a callback is not passed, just like normal Methods do
+
 ## 0.2.0
 
 - Renamed from `mdg:method` to `mdg:validated-method` and `Method` to `ValidatedMethod`

@@ -25,6 +25,14 @@ const methodWithArgs = new ValidatedMethod({
   }
 });
 
+const methodThrowsImmediately = new ValidatedMethod({
+  name: 'methodThrowsImmediately',
+  validate: null,
+  run() {
+    throw new Meteor.Error('error');
+  }
+});
+
 describe('mdg:method', () => {
   it('defines a method that can be called', (done) => {
     plainMethod.call({}, (error, result) => {
@@ -62,6 +70,20 @@ describe('mdg:method', () => {
 
         done();
       });
+    });
+  });
+
+  it('throws error if no callback passed', (done) => {
+    methodThrowsImmediately.call({}, (err) => {
+      // If you pass a callback, you get the error in the callback
+      assert.ok(err);
+
+      // If no callback, the error is thrown
+      assert.throws(() => {
+        methodThrowsImmediately.call({});
+      }, /error/);
+
+      done();
     });
   });
 });
