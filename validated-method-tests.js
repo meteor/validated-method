@@ -96,6 +96,9 @@ describe('mdg:method', () => {
   });
 
   it('has access to the name on this.name', (done) => {
+    const ret = methodReturnsName._execute();
+    assert.equal(ret, 'methodReturnsName');
+
     methodReturnsName.call({}, (err, res) => {
       // The Method knows its own name
       assert.equal(res, 'methodReturnsName');

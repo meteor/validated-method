@@ -70,7 +70,7 @@ ValidatedMethod = class ValidatedMethod {
     methodInvocation = methodInvocation || {};
 
     // Add `this.name` to reference the Method name
-    methodInvocation.name = name;
+    methodInvocation.name = this.name;
 
     const validateResult = this.validate.bind(methodInvocation)(args);
 

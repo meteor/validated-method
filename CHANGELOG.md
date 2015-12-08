@@ -1,5 +1,9 @@
 # Change log
 
+## 0.2.3
+
+- `this.name` is now accessible if the Method is called via `_execute`.
+
 ## 0.2.2
 
 - You can now access the Method name through `this.name` inside `run()`.
