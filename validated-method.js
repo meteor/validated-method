@@ -29,9 +29,6 @@ ValidatedMethod = class ValidatedMethod {
         check(args, Match.Any);
         const methodInvocation = this;
 
-        // Add `this.name` to reference the Method name
-        methodInvocation.name = name;
-
         return method._execute(methodInvocation, args);
       }
     });
@@ -70,6 +67,11 @@ ValidatedMethod = class ValidatedMethod {
   }
 
   _execute(methodInvocation, args) {
+    methodInvocation = methodInvocation || {};
+
+    // Add `this.name` to reference the Method name
+    methodInvocation.name = name;
+
     const validateResult = this.validate.bind(methodInvocation)(args);
 
     if (typeof validateResult !== 'undefined') {
