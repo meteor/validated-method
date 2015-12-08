@@ -28,6 +28,10 @@ ValidatedMethod = class ValidatedMethod {
         // Silence audit-argument-checks since arguments are always checked when using this package
         check(args, Match.Any);
         const methodInvocation = this;
+
+        // Add `this.name` to reference the Method name
+        methodInvocation.name = name;
+
         return method._execute(methodInvocation, args);
       }
     });

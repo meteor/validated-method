@@ -1,8 +1,12 @@
 # Change log
 
+## 0.2.2
+
+- You can now access the Method name through `this.name` inside `run()`.
+
 ## 0.2.1
 
-- Throw errors if a callback is not passed, just like normal Methods do
+- Throw errors if a callback is not passed, just like normal Methods do.
 
 ## 0.2.0
 

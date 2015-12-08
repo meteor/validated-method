@@ -33,6 +33,14 @@ const methodThrowsImmediately = new ValidatedMethod({
   }
 });
 
+const methodReturnsName = new ValidatedMethod({
+  name: 'methodReturnsName',
+  validate: null,
+  run() {
+    return this.name;
+  }
+});
+
 describe('mdg:method', () => {
   it('defines a method that can be called', (done) => {
     plainMethod.call({}, (error, result) => {
@@ -82,6 +90,15 @@ describe('mdg:method', () => {
       assert.throws(() => {
         methodThrowsImmediately.call({});
       }, /error/);
+
+      done();
+    });
+  });
+
+  it('has access to the name on this.name', (done) => {
+    methodReturnsName.call({}, (err, res) => {
+      // The Method knows its own name
+      assert.equal(res, 'methodReturnsName');
 
       done();
     });
