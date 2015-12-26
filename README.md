@@ -144,6 +144,10 @@ If your method does not need argument validation, perhaps because it does not ta
 
 You can define a method on a non-default DDP connection by passing an extra `connection` option to the constructor.
 
+#### Secret server code
+
+If you want to keep some of your method code secret on the server, check out [Served Files](http://guide.meteor.com/security.html#served-files) from the Meteor Guide.
+
 ### Using a ValidatedMethod
 
 #### method#call(args: Object)
