@@ -1,30 +1,34 @@
 /* global ValidatedMethod:true */
 
 ValidatedMethod = class ValidatedMethod {
-  constructor({
-    name,
-    validate,
-    run,
-    connection = Meteor
-  }) {
-    check(name, String);
-    check(run, Function);
+  constructor(options) {
+    // Default to no mixins
+    options.mixins = options.mixins || [];
+    check(options.mixins, [Function]);
+    options = applyMixins(options, options.mixins);
+
+    // connection argument defaults to Meteor, which is where Methods are defined on client and
+    // server
+    options.connection = options.connection || Meteor;
 
     // Allow validate: null shorthand for methods that take no arguments
-    if (validate === null) validate = function () {};
+    if (options.validate === null) {
+      options.validate = function () {};
+    }
 
-    check(validate, Function);
+    check(options, Match.ObjectIncluding({
+      name: String,
+      validate: Function,
+      run: Function,
+      mixins: [Function],
+      connection: Object,
+    }));
 
-    _.extend(this, {
-      name,
-      validate,
-      run,
-      connection
-    });
+    _.extend(this, options);
 
     const method = this;
     this.connection.methods({
-      [name](args) {
+      [options.name](args) {
         // Silence audit-argument-checks since arguments are always checked when using this package
         check(args, Match.Any);
         const methodInvocation = this;
@@ -82,3 +86,15 @@ perhaps you meant to throw an error?`);
     return this.run.bind(methodInvocation)(args);
   }
 };
+
+// Mixins get a chance to transform the arguments before they are passed to the actual Method
+function applyMixins(args, mixins) {
+  // You can pass nested arrays so that people can ship mixin packs
+  const flatMixins = _.flatten(mixins);
+
+  flatMixins.forEach((mixin) => {
+    args = mixin(args);
+  });
+
+  return args;
+}

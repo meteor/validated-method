@@ -1,13 +1,14 @@
 # mdg:validated-method
 
-### Define Meteor methods in a structured way
+### Define Meteor methods in a structured way, with mixins
 
 ```js
 // Method definition
 const method = new ValidatedMethod({
   name, // DDP method name
+  mixins, // Method extensions
   validate, // argument validation
-  run // method body
+  run // Method body
 });
 
 // Method call
@@ -21,7 +22,7 @@ boilerplate around methods that could be easily abstracted away.
 ### Benefits of ValidatedMethod
 
 1. Have an object that represents your method. Refer to it through JavaScript scope rather than
-by a magic string name
+by a magic string name.
 1. Built-in validation of arguments through `aldeed:simple-schema`, or roll your own argument validation.
 1. Easily call your method from tests or server-side code, passing in any user ID you want. No need for [two-tiered methods](https://www.discovermeteor.com/blog/meteor-pattern-two-tiered-methods/) anymore!
 1. [Throw errors from the client-side method simulation](#validation-and-throwstubexceptions) to prevent execution of the server-side
@@ -29,13 +30,9 @@ method - this means you can do complex client-side validation in the body on the
 waste server-side resources.
 1. Get the return value of the stub by default, to take advantage of [consistent ID generation](#id-generation-and-returnstubvalue). This
 way you can implement a custom insert method with optimistic UI.
+1. Install Method extensions via mixins.
 
-See extensive code samples in the Todos example app below:
-
-1. [Todos](https://github.com/meteor/todos/blob/master/packages/todos/methods.js) and [Lists](https://github.com/meteor/todos/blob/master/packages/lists/methods.js) method definitions
-2. [Lists method tests](https://github.com/meteor/todos/blob/b890fc2ac8846051031370035421893fa4145b86/packages/lists/lists-tests.js#L55)
-3. Some call sites: [1](https://github.com/meteor/todos/blob/b890fc2ac8846051031370035421893fa4145b86/packages/lists-show/lists-show.js#L19), [2](https://github.com/meteor/todos/blob/b890fc2ac8846051031370035421893fa4145b86/packages/lists-show/lists-show.js#L63), [3](https://github.com/meteor/todos/blob/b890fc2ac8846051031370035421893fa4145b86/packages/todos-main/app-body.js#L108)
-
+See extensive code samples in the [Todos example app](https://github.com/meteor/todos).
 
 ### Defining a method
 
@@ -191,6 +188,35 @@ it('only makes the list public if you made it private', () => {
   assertListAndTodoArePrivate();
 });
 ```
+
+### Mixins
+
+Every `ValidatedMethod` can optionally take an array of _mixins_. A mixin is simply a function that takes the options argument from the constructor, and returns a new object of options. For example, a mixin that enables a `schema` property and fills in `validate` for you would look like this:
+
+```js
+function schemaMixin(methodOptions) {
+  methodOptions.validate = methodOptions.schema.validator();
+  return methodOptions;
+}
+```
+
+Then, you could use it like this:
+
+```js
+const methodWithSchemaMixin = new ValidatedMethod({
+  name: 'methodWithSchemaMixin',
+  mixins: [schemaMixin],
+  schema: new SimpleSchema({
+    int: { type: Number },
+    string: { type: String },
+  }),
+  run() {
+    return 'result';
+  }
+});
+```
+
+If you write a helpful `ValidatedMethod` mixin, please file an issue so that it can be listed here!
 
 ### Ideas
 

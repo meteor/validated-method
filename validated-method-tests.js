@@ -41,6 +41,23 @@ const methodReturnsName = new ValidatedMethod({
   }
 });
 
+const methodWithSchemaMixin = new ValidatedMethod({
+  name: 'methodWithSchemaMixin',
+  mixins: [schemaMixin],
+  schema: new SimpleSchema({
+    int: { type: Number },
+    string: { type: String },
+  }),
+  run() {
+    return 'result';
+  }
+});
+
+function schemaMixin(methodOptions) {
+  methodOptions.validate = methodOptions.schema.validator();
+  return methodOptions;
+}
+
 describe('mdg:method', () => {
   it('defines a method that can be called', (done) => {
     plainMethod.call({}, (error, result) => {
@@ -65,18 +82,20 @@ describe('mdg:method', () => {
   });
 
   it('checks schema', (done) => {
-    methodWithArgs.call({}, (error, result) => {
-      // 2 invalid fields
-      assert.equal(error.errors.length, 2);
+    [methodWithArgs, methodWithSchemaMixin].forEach((method) => {
+      method.call({}, (error, result) => {
+        // 2 invalid fields
+        assert.equal(error.errors.length, 2);
 
-      methodWithArgs.call({
-        int: 5,
-        string: "what",
-      }, (error, result) => {
-        // All good!
-        assert.equal(result, 'result');
+        method.call({
+          int: 5,
+          string: "what",
+        }, (error, result) => {
+          // All good!
+          assert.equal(result, 'result');
 
-        done();
+          done();
+        });
       });
     });
   });
