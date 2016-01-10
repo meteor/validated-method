@@ -53,6 +53,15 @@ const methodWithSchemaMixin = new ValidatedMethod({
   }
 });
 
+const faultyMixinOptions = {
+  name: 'methodWithFaultySchemaMixin',
+  mixins: [function nonReturningFunction() {}],
+  schema: null,
+  run() {
+    return 'result';
+  }
+};
+
 function schemaMixin(methodOptions) {
   methodOptions.validate = methodOptions.schema.validator();
   return methodOptions;
@@ -112,6 +121,12 @@ describe('mdg:method', () => {
 
       done();
     });
+  });
+
+  it('throws error if a mixin does not return the options object', () => {
+    assert.throws(() => {
+      new ValidatedMethod(faultyMixinOptions);
+    }, /didn't return the options object/);
   });
 
   it('has access to the name on this.name', (done) => {

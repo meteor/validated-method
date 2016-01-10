@@ -94,6 +94,17 @@ function applyMixins(args, mixins) {
 
   flatMixins.forEach((mixin) => {
     args = mixin(args);
+
+    if(!Match.test(args, Object)) {
+      const functionName = mixin.toString().match(/function\s(\w+)/);
+      let msg = 'One of the mixins';
+
+      if(functionName) {
+        msg = `The function '${functionName[1]}'`;
+      }
+
+      throw new Error(`${msg} didn't return the options object.`);
+    }
   });
 
   return args;
