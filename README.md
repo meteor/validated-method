@@ -1,6 +1,6 @@
 # mdg:validated-method
 
-### Define Meteor methods in a structured way, with mixins
+### Define Meteor methods in a structured way, with m xxxixins
 
 ```js
 // Method definition
