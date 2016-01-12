@@ -1,5 +1,13 @@
 # Change log
 
+## 1.0.1
+
+- Added error handling when a mixin doesn't return any options, thanks to [PR #24](https://github.com/meteor/validated-method/pull/24).
+
+## 1.0.0
+
+- Added mixins, which are functions that transform incoming Method options.
+
 ## 0.2.3
 
 - `this.name` is now accessible if the Method is called via `_execute`.
