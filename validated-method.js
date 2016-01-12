@@ -5,6 +5,7 @@ ValidatedMethod = class ValidatedMethod {
     // Default to no mixins
     options.mixins = options.mixins || [];
     check(options.mixins, [Function]);
+    check(options.name, String);
     options = applyMixins(options, options.mixins);
 
     // connection argument defaults to Meteor, which is where Methods are defined on client and
@@ -91,6 +92,8 @@ perhaps you meant to throw an error?`);
 function applyMixins(args, mixins) {
   // You can pass nested arrays so that people can ship mixin packs
   const flatMixins = _.flatten(mixins);
+  // Save name of the method here, so we can attach it to potential error messages
+  const {name} = args;
 
   flatMixins.forEach((mixin) => {
     args = mixin(args);
@@ -103,7 +106,7 @@ function applyMixins(args, mixins) {
         msg = `The function '${functionName[1]}'`;
       }
 
-      throw new Error(`${msg} didn't return the options object.`);
+      throw new Error(`Error in ${name} method: ${msg} didn't return the options object.`);
     }
   });
 
