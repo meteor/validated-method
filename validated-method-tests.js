@@ -53,15 +53,6 @@ const methodWithSchemaMixin = new ValidatedMethod({
   }
 });
 
-const faultyMixinOptions = {
-  name: 'methodWithFaultySchemaMixin',
-  mixins: [function nonReturningFunction() {}],
-  schema: null,
-  run() {
-    return 'result';
-  }
-};
-
 function schemaMixin(methodOptions) {
   methodOptions.validate = methodOptions.schema.validator();
   return methodOptions;
@@ -125,8 +116,26 @@ describe('mdg:method', () => {
 
   it('throws error if a mixin does not return the options object', () => {
     assert.throws(() => {
-      new ValidatedMethod(faultyMixinOptions);
-    }, /didn't return the options object/);
+      new ValidatedMethod({
+        name: 'methodWithFaultySchemaMixin',
+        mixins: [function nonReturningFunction() {}],
+        schema: null,
+        run() {
+          return 'result';
+        }
+      });
+    }, /Error in methodWithFaultySchemaMixin method: The function 'nonReturningFunction' didn't return the options object/);
+
+    assert.throws(() => {
+      new ValidatedMethod({
+        name: 'methodWithFaultySchemaMixin',
+        mixins: [function (args) { return args}, function () {}],
+        schema: null,
+        run() {
+          return 'result';
+        }
+      });
+    }, /Error in methodWithFaultySchemaMixin method: One of the mixins didn't return the options object/);
   });
 
   it('has access to the name on this.name', (done) => {
