@@ -163,6 +163,19 @@ Lists.methods.makePrivate.call({
 });
 ```
 
+#### method#callPromise(args: Object)
+
+Does the same thing as call, but returns a promise:
+
+```js
+Lists.methods.makePrivate.callPromise({
+  listId: list._id
+}).then(doSomethingWithResult)
+  .catch(function(err) {
+    handleError(err.error);
+  });
+```
+
 The return value of the server-side method is available as the second argument of the method
 callback.
 
