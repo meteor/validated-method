@@ -71,6 +71,20 @@ ValidatedMethod = class ValidatedMethod {
     }
   }
 
+  callPromise(args) {
+    const self = this;
+
+    return new Promise(function(resolve, reject){
+      self.call(args, function(err, result) {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(result);
+        }
+      });
+    });        
+  }
+
   _execute(methodInvocation, args) {
     methodInvocation = methodInvocation || {};
 
