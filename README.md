@@ -163,6 +163,10 @@ Lists.methods.makePrivate.call({
 });
 ```
 
+The return value of the server-side method is available as the second argument of the method
+callback.
+
+
 #### method#callPromise(args: Object)
 
 Does the same thing as call, but returns a promise:
@@ -175,9 +179,6 @@ Lists.methods.makePrivate.callPromise({
     handleError(err.error);
   });
 ```
-
-The return value of the server-side method is available as the second argument of the method
-callback.
 
 #### method#\_execute(context: Object, args: Object)
 
