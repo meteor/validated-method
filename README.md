@@ -222,6 +222,11 @@ If you write a helpful `ValidatedMethod` mixin, please file an issue so that it 
 
 - [tunifight:loggedin-mixin](https://atmospherejs.com/tunifight/loggedin-mixin) : Simple mixin to check if the user is logged in before calling the `run` function.
 
+- [ziarno:restrict-mixin](https://atmospherejs.com/ziarno/restrict-mixin) : A mixin to used to throw errors if condition pass
+
+- [ziarno:provide-mixin](https://atmospherejs.com/ziarno/provide-mixin) : A mixin to add arguments to the run function
+
+
 ### Ideas
 
 - It could be nice to have a `SimpleSchemaMethod` which just lets you specify a `schema` option rather than having to pass a `validator` function into the `validate` option. This would enable the below.
