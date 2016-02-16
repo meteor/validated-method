@@ -222,6 +222,7 @@ If you write a helpful `ValidatedMethod` mixin, please file an issue so that it 
 
 - [tunifight:loggedin-mixin](https://atmospherejs.com/tunifight/loggedin-mixin) : Simple mixin to check if the user is logged in before calling the `run` function.
 - [didericis:callpromise-mixin](https://atmospherejs.com/didericis/callpromise-mixin) : A mixin for the mdg:validated-method package that adds `callPromise`.
+- [lacosta:method-hooks](https://atmospherejs.com/lacosta/method-hooks) : A mixin that adds before and after hooks
 
 ### Ideas
 
