@@ -1,12 +1,12 @@
 Package.describe({
   name: 'mdg:validated-method',
   summary: 'A simple wrapper for Meteor.methods',
-  version: '1.0.1',
+  version: '1.0.2',
   documentation: 'README.md',
 });
 
 Package.onUse(function (api) {
-  api.versionsFrom('1.2.1');
+  api.versionsFrom('1.2');
 
   api.use([
     'ecmascript',

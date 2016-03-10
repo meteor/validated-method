@@ -1,5 +1,9 @@
 # Change log
 
+## 1.0.2
+
+- Relax `versionsFrom` constraint so that it works with 1.3 beta 16. [#42](https://github.com/meteor/validated-method/issues/42)
+
 ## 1.0.1
 
 - Added error handling when a mixin doesn't return any options, thanks to [PR #24](https://github.com/meteor/validated-method/pull/24).
