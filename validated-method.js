@@ -41,7 +41,7 @@ ValidatedMethod = class ValidatedMethod {
       throwStubExceptions: true,
     };
 
-    options.callOptions = _.extend(defaultCallOptions, options.callOptions);
+    options.callOptions = _.extend({}, defaultCallOptions, options.callOptions);
 
     _.extend(this, options);
 
