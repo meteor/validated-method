@@ -30,6 +30,19 @@ ValidatedMethod = class ValidatedMethod {
       callOptions: Object,
     }));
 
+    const defaultCallOptions = {
+      // Make it possible to get the ID of an inserted item
+      returnStubValue: true,
+
+      // Don't call the server method if the client stub throws an error, so that we don't end
+      // up doing validations twice
+      // XXX needs option to disable, in cases where the client might have incomplete information to
+      // make a decision
+      throwStubExceptions: true,
+    };
+
+    options.callOptions = _.extend(defaultCallOptions, options.callOptions);
+
     _.extend(this, options);
 
     const method = this;
@@ -50,15 +63,6 @@ ValidatedMethod = class ValidatedMethod {
       callback = args;
       args = {};
     }
-
-    // Make it possible to get the ID of an inserted item
-    this.callOptions.returnStubValue = true;
-
-    // Don't call the server method if the client stub throws an error, so that we don't end
-    // up doing validations twice
-    // XXX needs option to disable, in cases where the client might have incomplete information to
-    // make a decision
-    this.callOptions.throwStubExceptions = true;
 
     try {
       return this.connection.apply(this.name, [args], this.callOptions, callback);
