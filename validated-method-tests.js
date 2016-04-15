@@ -54,10 +54,10 @@ const methodWithSchemaMixin = new ValidatedMethod({
 });
 
 let resultReceived = false;
-const methodWithCallOptions = new ValidatedMethod({
-  name: 'methodWithCallOptions',
+const methodWithApplyOptions = new ValidatedMethod({
+  name: 'methodWithApplyOptions',
   validate: new SimpleSchema({}).validator(),
-  callOptions: {
+  applyOptions: {
     onResultReceived: function() {
       resultReceived = true;
     }
@@ -171,7 +171,7 @@ describe('mdg:method', () => {
     }
 
     resultReceived = false;
-    methodWithCallOptions.call({}, (err, res) => {
+    methodWithApplyOptions.call({}, (err, res) => {
       // The Method knows its own name
       assert.equal(resultReceived, true);
 

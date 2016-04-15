@@ -8,7 +8,7 @@ const method = new ValidatedMethod({
   name, // DDP method name
   mixins, // Method extensions
   validate, // argument validation
-  callOptions, // options passed to Meteor.apply
+  applyOptions, // options passed to Meteor.apply
   run // Method body
 });
 
@@ -59,7 +59,7 @@ Lists.methods.makePrivate = new ValidatedMethod({
   // This is optional, but you can use this to pass options into Meteor.apply every
   // time this method is called.  This can be used, for instance, to ask meteor not
   // to retry this method if it fails.
-  callOptions: {
+  applyOptions: {
     noRetry: true,
   },
 
@@ -151,7 +151,7 @@ You can define a method on a non-default DDP connection by passing an extra `con
 
 #### Options to Meteor.apply
 
-The validated method, when called, executes itself via `Meteor.apply`.  The `apply` method also takes a few [options](http://docs.meteor.com/#/full/meteor_apply) which can be used to alter the way Meteor handles the method.  If you want to use those options you can supply them to the validated method when it is created, using the `callOptions` member.  Pass it an object that will be used with `Meteor.apply`.
+The validated method, when called, executes itself via `Meteor.apply`.  The `apply` method also takes a few [options](http://docs.meteor.com/#/full/meteor_apply) which can be used to alter the way Meteor handles the method.  If you want to use those options you can supply them to the validated method when it is created, using the `applyOptions` member.  Pass it an object that will be used with `Meteor.apply`.
 
 #### Secret server code
 

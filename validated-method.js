@@ -17,8 +17,8 @@ ValidatedMethod = class ValidatedMethod {
       options.validate = function () {};
     }
 
-    if (options.callOptions === undefined) {
-      options.callOptions = {};
+    if (options.applyOptions === undefined) {
+      options.applyOptions = {};
     }
 
     check(options, Match.ObjectIncluding({
@@ -27,10 +27,10 @@ ValidatedMethod = class ValidatedMethod {
       run: Function,
       mixins: [Function],
       connection: Object,
-      callOptions: Object,
+      applyOptions: Object,
     }));
 
-    const defaultCallOptions = {
+    const defaultApplyOptions = {
       // Make it possible to get the ID of an inserted item
       returnStubValue: true,
 
@@ -41,7 +41,7 @@ ValidatedMethod = class ValidatedMethod {
       throwStubExceptions: true,
     };
 
-    options.callOptions = _.extend({}, defaultCallOptions, options.callOptions);
+    options.applyOptions = _.extend({}, defaultApplyOptions, options.applyOptions);
 
     _.extend(this, options);
 
@@ -65,7 +65,7 @@ ValidatedMethod = class ValidatedMethod {
     }
 
     try {
-      return this.connection.apply(this.name, [args], this.callOptions, callback);
+      return this.connection.apply(this.name, [args], this.applyOptions, callback);
     } catch (err) {
       if (callback) {
         // Get errors from the stub in the same way as from the server-side method
