@@ -53,6 +53,20 @@ const methodWithSchemaMixin = new ValidatedMethod({
   }
 });
 
+let resultReceived = false;
+const methodWithCallOptions = new ValidatedMethod({
+  name: 'methodWithCallOptions',
+  validate: new SimpleSchema({}).validator(),
+  callOptions: {
+    onResultReceived: function() {
+      resultReceived = true;
+    }
+  },
+  run() {
+    return 'result';
+  }
+});
+
 function schemaMixin(methodOptions) {
   methodOptions.validate = methodOptions.schema.validator();
   return methodOptions;
@@ -145,6 +159,21 @@ describe('mdg:method', () => {
     methodReturnsName.call({}, (err, res) => {
       // The Method knows its own name
       assert.equal(res, 'methodReturnsName');
+
+      done();
+    });
+  });
+
+  it('can accept Meteor.apply options', (done) => {
+    if (Meteor.isServer) {
+      // the only apply option that I can think of to test is client side only
+      return done();
+    }
+
+    resultReceived = false;
+    methodWithCallOptions.call({}, (err, res) => {
+      // The Method knows its own name
+      assert.equal(resultReceived, true);
 
       done();
     });

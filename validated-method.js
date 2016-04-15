@@ -17,12 +17,17 @@ ValidatedMethod = class ValidatedMethod {
       options.validate = function () {};
     }
 
+    if (options.callOptions === undefined) {
+      options.callOptions = {};
+    }
+
     check(options, Match.ObjectIncluding({
       name: String,
       validate: Function,
       run: Function,
       mixins: [Function],
       connection: Object,
+      callOptions: Object,
     }));
 
     _.extend(this, options);
@@ -46,19 +51,17 @@ ValidatedMethod = class ValidatedMethod {
       args = {};
     }
 
-    const options = {
-      // Make it possible to get the ID of an inserted item
-      returnStubValue: true,
+    // Make it possible to get the ID of an inserted item
+    this.callOptions.returnStubValue = true;
 
-      // Don't call the server method if the client stub throws an error, so that we don't end
-      // up doing validations twice
-      // XXX needs option to disable, in cases where the client might have incomplete information to
-      // make a decision
-      throwStubExceptions: true
-    };
+    // Don't call the server method if the client stub throws an error, so that we don't end
+    // up doing validations twice
+    // XXX needs option to disable, in cases where the client might have incomplete information to
+    // make a decision
+    this.callOptions.throwStubExceptions = true;
 
     try {
-      return this.connection.apply(this.name, [args], options, callback);
+      return this.connection.apply(this.name, [args], this.callOptions, callback);
     } catch (err) {
       if (callback) {
         // Get errors from the stub in the same way as from the server-side method
