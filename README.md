@@ -237,6 +237,11 @@ If you write a helpful `ValidatedMethod` mixin, please file an issue so that it 
 - [didericis:callpromise-mixin](https://atmospherejs.com/didericis/callpromise-mixin) : A mixin for the mdg:validated-method package that adds `callPromise`.
 - [lacosta:method-hooks](https://atmospherejs.com/lacosta/method-hooks) : A mixin that adds before and after hooks
 
+- [ziarno:restrict-mixin](https://atmospherejs.com/ziarno/restrict-mixin) : A mixin to throw errors if condition pass
+
+- [ziarno:provide-mixin](https://atmospherejs.com/ziarno/provide-mixin) : A mixin to add arguments to the run function
+
+
 ### Ideas
 
 - It could be nice to have a `SimpleSchemaMethod` which just lets you specify a `schema` option rather than having to pass a `validator` function into the `validate` option. This would enable the below.
