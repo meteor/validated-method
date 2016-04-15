@@ -39,14 +39,14 @@ See extensive code samples in the [Todos example app](https://github.com/meteor/
 
 #### Using SimpleSchema
 
-Let's examine a method from the new [Todos example app](https://github.com/meteor/todos/blob/b890fc2ac8846051031370035421893fa4145b86/packages/lists/methods.js#L17) which makes a list private and takes the `listId` as an argument. The method also does permissions checks based on the currently logged-in user. Note this code uses new [ES2015 JavaScript syntax features](http://info.meteor.com/blog/es2015-get-started).
+Let's examine a method from the new [Todos example app](https://github.com/meteor/todos/blob/master/imports/api/lists/methods.js#L21) which makes a list private and takes the `listId` as an argument. The method also does permissions checks based on the currently logged-in user. Note this code uses new [ES2015 JavaScript syntax features](http://info.meteor.com/blog/es2015-get-started).
 
 ```js
 // Attach your method to a namespace
-Lists.methods.makePrivate = new ValidatedMethod({
+export const makePrivate = new ValidatedMethod({
   // The name of the method, sent over the wire. Same as the key provided
   // when calling Meteor.methods
-  name: 'Lists.methods.makePrivate',
+  name: 'lists.makePrivate',
 
   // Validation function for the arguments. Only keyword arguments are accepted,
   // so the arguments are an object rather than an array. The SimpleSchema validator
