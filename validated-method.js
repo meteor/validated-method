@@ -17,9 +17,8 @@ ValidatedMethod = class ValidatedMethod {
       options.validate = function () {};
     }
 
-    if (options.applyOptions === undefined) {
-      options.applyOptions = {};
-    }
+    // If this is null/undefined, make it an empty object
+    options.applyOptions = options.applyOptions || {};
 
     check(options, Match.ObjectIncluding({
       name: String,
@@ -30,19 +29,19 @@ ValidatedMethod = class ValidatedMethod {
       applyOptions: Object,
     }));
 
+    // Default options passed to Meteor.apply, can be overridden with applyOptions
     const defaultApplyOptions = {
       // Make it possible to get the ID of an inserted item
       returnStubValue: true,
 
       // Don't call the server method if the client stub throws an error, so that we don't end
       // up doing validations twice
-      // XXX needs option to disable, in cases where the client might have incomplete information to
-      // make a decision
       throwStubExceptions: true,
     };
 
     options.applyOptions = _.extend({}, defaultApplyOptions, options.applyOptions);
 
+    // Attach all options to the ValidatedMethod instance
     _.extend(this, options);
 
     const method = this;

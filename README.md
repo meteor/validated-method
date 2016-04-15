@@ -20,6 +20,8 @@ This is a simple wrapper package for `Meteor.methods`. The need for such a packa
 when the Meteor Guide was being written and we realized there was a lot of best-practices
 boilerplate around methods that could be easily abstracted away.
 
+> Note: the code samples in this README use the Meteor 1.3 import/export syntax, but this package works great in Meteor 1.2 as well. In that case, we recommend attaching your ValidatedMethod objects to the relevant collection, like `Lists.methods.insert = new ValidatedMethod(...)`.
+
 ### Benefits of ValidatedMethod
 
 1. Have an object that represents your method. Refer to it through JavaScript scope rather than
@@ -42,8 +44,8 @@ See extensive code samples in the [Todos example app](https://github.com/meteor/
 Let's examine a method from the new [Todos example app](https://github.com/meteor/todos/blob/b890fc2ac8846051031370035421893fa4145b86/packages/lists/methods.js#L17) which makes a list private and takes the `listId` as an argument. The method also does permissions checks based on the currently logged-in user. Note this code uses new [ES2015 JavaScript syntax features](http://info.meteor.com/blog/es2015-get-started).
 
 ```js
-// Attach your method to a namespace
-Lists.methods.makePrivate = new ValidatedMethod({
+// Export your method from this module
+export const makePrivate = new ValidatedMethod({
   // The name of the method, sent over the wire. Same as the key provided
   // when calling Meteor.methods
   name: 'Lists.methods.makePrivate',
@@ -119,7 +121,7 @@ const method = new ValidatedMethod({
     }
   },
 
-  ...
+  // ...
 });
 ```
 
@@ -137,7 +139,7 @@ const method = new ValidatedMethod({
     });
   },
 
-  ...
+  // ...
 });
 ```
 
@@ -151,7 +153,25 @@ You can define a method on a non-default DDP connection by passing an extra `con
 
 #### Options to Meteor.apply
 
-The validated method, when called, executes itself via `Meteor.apply`.  The `apply` method also takes a few [options](http://docs.meteor.com/#/full/meteor_apply) which can be used to alter the way Meteor handles the method.  If you want to use those options you can supply them to the validated method when it is created, using the `applyOptions` member.  Pass it an object that will be used with `Meteor.apply`.
+The validated method, when called, executes itself via `Meteor.apply`.  The `apply` method also takes a few [options](http://docs.meteor.com/#/full/meteor_apply) which can be used to alter the way Meteor handles the method. If you want to use those options you can supply them to the validated method when it is created, using the `applyOptions` member.  Pass it an object that will be used with `Meteor.apply`.
+
+By default, `ValidatedMethod` uses the following options:
+
+```js
+{
+  // Make it possible to get the ID of an inserted item
+  returnStubValue: true,
+
+  // Don't call the server method if the client stub throws an error, so that we don't end
+  // up doing validations twice
+  throwStubExceptions: true,
+};
+```
+
+Other options you might be interested in passing are:
+
+- `noRetry: true` This will stop the method from retrying if your client disconnects and reconnects.
+- `onResultReceived: (result) => { ... }` A callback to call when the return value is sent from the server. This actually happens before the regular Method callback fires, you can read more [details about the Method lifecycle in the Meteor Guide](http://guide.meteor.com/methods.html#call-lifecycle).
 
 #### Secret server code
 
@@ -164,7 +184,11 @@ If you want to keep some of your method code secret on the server, check out [Se
 Call a method like so:
 
 ```js
-Lists.methods.makePrivate.call({
+import {
+  makePrivate,
+} from '/imports/api/lists/methods';
+
+makePrivate.call({
   listId: list._id
 }, (err, res) => {
   if (err) {
@@ -188,12 +212,12 @@ it('only makes the list public if you made it private', () => {
   const context = { userId };
   const args = { listId };
 
-  Lists.methods.makePrivate._execute(context, args);
+  makePrivate._execute(context, args);
 
   const otherUserContext = { userId: Random.id() };
 
   assert.throws(() => {
-    Lists.methods.makePublic._execute(otherUserContext, args);
+    makePublic._execute(otherUserContext, args);
   }, Meteor.Error, /Lists.methods.makePublic.accessDenied/);
 
   // Make sure things are still private
@@ -230,21 +254,18 @@ const methodWithSchemaMixin = new ValidatedMethod({
 
 ### Community mixins
 
-If you write a helpful `ValidatedMethod` mixin, please file an issue so that it can be listed here!.
+If you write a helpful `ValidatedMethod` mixin, please file an issue or PR so that it can be listed here!
 
 - [tunifight:loggedin-mixin](https://atmospherejs.com/tunifight/loggedin-mixin) : Simple mixin to check if the user is logged in before calling the `run` function.
 - [didericis:permissions-mixin](https://atmospherejs.com/didericis/permissions-mixin) : A permissions mixin to use with mdg:validated-method package.
 - [didericis:callpromise-mixin](https://atmospherejs.com/didericis/callpromise-mixin) : A mixin for the mdg:validated-method package that adds `callPromise`.
 - [lacosta:method-hooks](https://atmospherejs.com/lacosta/method-hooks) : A mixin that adds before and after hooks
-
 - [ziarno:restrict-mixin](https://atmospherejs.com/ziarno/restrict-mixin) : A mixin to throw errors if condition pass
-
 - [ziarno:provide-mixin](https://atmospherejs.com/ziarno/provide-mixin) : A mixin to add arguments to the run function
-
 
 ### Ideas
 
-- It could be nice to have a `SimpleSchemaMethod` which just lets you specify a `schema` option rather than having to pass a `validator` function into the `validate` option. This would enable the below.
+- It could be nice to have a `SimpleSchema` mixin which just lets you specify a `schema` option rather than having to pass a `validator` function into the `validate` option. This would enable the below.
 - With a little bit of work, this package could be improved to allow easily generating a form from a method, based on the schema of the arguments it takes. We just need a way of specifying some of the arguments programmatically - for example, if you want to make a form to add a comment to a post, you need to pass the post ID somehow - you don't want to just have a text field called "Post ID".
 
 ### Discussion and in-depth info
@@ -270,7 +291,7 @@ For a while now, Meteor has had a [hard-to-find](https://forums.meteor.com/t/how
 Here's an example of how you could implement a custom insert method, taken from the [Todos example app](https://github.com/meteor/todos/blob/master/packages/lists/methods.js) we are working on for the Meteor Guide:
 
 ```js
-Lists.methods.insert = new ValidatedMethod({
+const insert = new ValidatedMethod({
   name: 'Lists.methods.insert',
   validate: new SimpleSchema({}).validator(),
   run() {
@@ -282,8 +303,12 @@ Lists.methods.insert = new ValidatedMethod({
 You can get the ID generated by `insert` by reading the return value of `call`:
 
 ```js
+import {
+  insert,
+} from '/imports/api/lists/methods';
+
 // The return value of the stub is an ID generated on the client
-const listId = Lists.methods.insert.call((err) => {
+const listId = insert.call((err) => {
   if (err) {
     // At this point, we have already redirected to the new list page, but
     // for some reason the list didn't get created. This should almost never

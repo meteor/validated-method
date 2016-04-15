@@ -1,5 +1,9 @@
 # Change log
 
+## 1.1.0
+
+- Allow overriding default `Meteor.apply` options via `applyOptions` option. [#46](https://github.com/meteor/validated-method/pull/46)
+
 ## 1.0.2
 
 - Relax `versionsFrom` constraint so that it works with 1.3 beta 16. [#42](https://github.com/meteor/validated-method/issues/42)
