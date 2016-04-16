@@ -95,8 +95,9 @@ describe('mdg:method', () => {
     });
   });
 
-  it('checks schema', (done) => {
-    [methodWithArgs, methodWithSchemaMixin].forEach((method) => {
+
+  [methodWithArgs, methodWithSchemaMixin].forEach((method) => {
+    it('checks schema ' + method.name, (done) => {
       method.call({}, (error, result) => {
         // 2 invalid fields
         assert.equal(error.errors.length, 2);
