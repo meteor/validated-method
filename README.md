@@ -262,6 +262,7 @@ If you write a helpful `ValidatedMethod` mixin, please file an issue or PR so th
 - [lacosta:method-hooks](https://atmospherejs.com/lacosta/method-hooks) : A mixin that adds before and after hooks
 - [ziarno:restrict-mixin](https://atmospherejs.com/ziarno/restrict-mixin) : A mixin to throw errors if condition pass
 - [ziarno:provide-mixin](https://atmospherejs.com/ziarno/provide-mixin) : A mixin to add arguments to the run function
+- [rlivingston:simple-schema-mixin](https://atmospherejs.com/rlivingston/simple-schema-mixin) : A mixin to ease the use of SimpleSchema for validation.
 
 ### Ideas
 
