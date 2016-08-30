@@ -94,6 +94,20 @@ export const makePrivate = new ValidatedMethod({
 
 The `validator` function called in the example requires SimpleSchema version 1.4+.
 
+Be aware that by default the `validator` function does not [clean](https://github.com/aldeed/meteor-simple-schema#cleaning-data)
+the method parameters before checking them. This behavior differs from that of
+`aldeed:collection2`, which always cleans the input data before inserts, updates,
+or upserts.
+
+If you want the validator to clean its inputs before checking, make sure to pass
+the `{ clean: true }` option to the `validator` function:
+
+```js
+  validate: new SimpleSchema({
+    listId: { type: String }
+  }).validator({ clean: true }),
+```
+
 #### Using your own argument validation function
 
 If `aldeed:simple-schema` doesn't work for your validation needs, just define a custom `validate`
