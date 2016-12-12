@@ -216,6 +216,20 @@ makePrivate.call({
 The return value of the server-side method is available as the second argument of the method
 callback.
 
+
+#### method#callPromise(args: Object)
+
+Does the same thing as call, but returns a promise:
+
+```js
+Lists.methods.makePrivate.callPromise({
+  listId: list._id
+}).then(doSomethingWithResult)
+  .catch(function(err) {
+    handleError(err.error);
+  });
+```
+
 #### method#\_execute(context: Object, args: Object)
 
 Call this from your test code to simulate calling a method on behalf of a particular user:
