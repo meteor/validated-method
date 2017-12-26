@@ -24,10 +24,13 @@ Package.onTest(function (api) {
     'ecmascript',
     'practicalmeteor:mocha@2.1.0_5',
     'practicalmeteor:chai@2.1.0_1',
-    'aldeed:simple-schema@1.4.0',
     'mdg:validated-method',
     'random'
   ]);
 
   api.addFiles('validated-method-tests.js');
+});
+
+Npm.depends({
+  'simpl-schema': "1.3.0",
 });
