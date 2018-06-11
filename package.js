@@ -1,7 +1,7 @@
 Package.describe({
   name: 'mdg:validated-method',
   summary: 'A simple wrapper for Meteor.methods',
-  version: '1.1.0',
+  version: '1.2.0',
   documentation: 'README.md',
 });
 
@@ -12,7 +12,6 @@ Package.onUse(function (api) {
     'ecmascript',
     'check',
     'ddp',
-    'underscore',
   ]);
 
   api.addFiles('validated-method.js');

@@ -39,10 +39,10 @@ ValidatedMethod = class ValidatedMethod {
       throwStubExceptions: true,
     };
 
-    options.applyOptions = _.extend({}, defaultApplyOptions, options.applyOptions);
+    options.applyOptions = Object.assign({}, defaultApplyOptions, options.applyOptions);
 
     // Attach all options to the ValidatedMethod instance
-    _.extend(this, options);
+    Object.assign(this, options);
 
     const method = this;
     this.connection.methods({
@@ -58,7 +58,7 @@ ValidatedMethod = class ValidatedMethod {
 
   call(args, callback) {
     // Accept calling with just a callback
-    if (_.isFunction(args)) {
+    if ( typeof args === 'function' ) {
       callback = args;
       args = {};
     }
@@ -97,7 +97,7 @@ perhaps you meant to throw an error?`);
 // Mixins get a chance to transform the arguments before they are passed to the actual Method
 function applyMixins(args, mixins) {
   // You can pass nested arrays so that people can ship mixin packs
-  const flatMixins = _.flatten(mixins);
+  const flatMixins = flatten(mixins);
   // Save name of the method here, so we can attach it to potential error messages
   const {name} = args;
 
@@ -117,4 +117,20 @@ function applyMixins(args, mixins) {
   });
 
   return args;
+}
+
+// flatten utility function
+function flatten(input, output) {
+  output = output || [];
+  let idx = output.length;
+  for (let i = 0, length = input.length; i < length; i++) {
+    let value = input[i];
+    if (Array.isArray(value)) {
+      // Flatten current level of array or arguments object.
+      flatten(value, output);
+      idx = output.length;
+      output[idx++] = value;
+    }
+  }
+  return output;
 }
