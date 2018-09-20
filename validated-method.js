@@ -1,6 +1,6 @@
-/* global ValidatedMethod:true */
+import { check, Match } from 'meteor/check';
 
-ValidatedMethod = class ValidatedMethod {
+export class ValidatedMethod {
   constructor(options) {
     // Default to no mixins
     options.mixins = options.mixins || [];
@@ -39,7 +39,10 @@ ValidatedMethod = class ValidatedMethod {
       throwStubExceptions: true,
     };
 
-    options.applyOptions = Object.assign({}, defaultApplyOptions, options.applyOptions);
+    options.applyOptions = {
+      ...defaultApplyOptions,
+      ...options.applyOptions
+    };
 
     // Attach all options to the ValidatedMethod instance
     Object.assign(this, options);
@@ -77,9 +80,7 @@ ValidatedMethod = class ValidatedMethod {
     }
   }
 
-  _execute(methodInvocation, args) {
-    methodInvocation = methodInvocation || {};
-
+  _execute(methodInvocation = {}, args) {
     // Add `this.name` to reference the Method name
     methodInvocation.name = this.name;
 
@@ -96,12 +97,10 @@ perhaps you meant to throw an error?`);
 
 // Mixins get a chance to transform the arguments before they are passed to the actual Method
 function applyMixins(args, mixins) {
-  // You can pass nested arrays so that people can ship mixin packs
-  const flatMixins = flatten(mixins);
   // Save name of the method here, so we can attach it to potential error messages
-  const {name} = args;
+  const { name } = args;
 
-  flatMixins.forEach((mixin) => {
+  mixins.forEach((mixin) => {
     args = mixin(args);
 
     if(!Match.test(args, Object)) {
@@ -117,20 +116,4 @@ function applyMixins(args, mixins) {
   });
 
   return args;
-}
-
-// flatten utility function
-function flatten(input, output) {
-  output = output || [];
-  let idx = output.length;
-  for (let i = 0, length = input.length; i < length; i++) {
-    let value = input[i];
-    if (Array.isArray(value)) {
-      // Flatten current level of array or arguments object.
-      flatten(value, output);
-      idx = output.length;
-      output[idx++] = value;
-    }
-  }
-  return output;
 }
