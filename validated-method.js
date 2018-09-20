@@ -4,7 +4,9 @@ export class ValidatedMethod {
   constructor(options) {
     // Default to no mixins
     options.mixins = options.mixins || [];
-    check(options.mixins, [Function]);
+    const Mixins = [Match.OneOf(Function)];
+    Mixins[0].choices.push(Mixins);
+    check(options.mixins, Mixins);
     check(options.name, String);
     options = applyMixins(options, options.mixins);
 
@@ -24,7 +26,7 @@ export class ValidatedMethod {
       name: String,
       validate: Function,
       run: Function,
-      mixins: [Function],
+      mixins: Mixins,
       connection: Object,
       applyOptions: Object,
     }));
