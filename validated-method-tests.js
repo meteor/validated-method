@@ -1,3 +1,8 @@
+import { Meteor } from 'meteor/meteor';
+import { ValidatedMethod } from 'meteor/mdg:validated-method';
+import { SimpleSchema } from 'meteor/aldeed:simple-schema';
+import { assert } from 'meteor/practicalmeteor:chai';
+
 const plainMethod = new ValidatedMethod({
   name: 'plainMethod',
   validate: new SimpleSchema({}).validator(),
@@ -144,7 +149,7 @@ describe('mdg:method', () => {
     assert.throws(() => {
       new ValidatedMethod({
         name: 'methodWithFaultySchemaMixin',
-        mixins: [function (args) { return args}, function () {}],
+        mixins: [args => args, function () {}],
         schema: null,
         run() {
           return 'result';

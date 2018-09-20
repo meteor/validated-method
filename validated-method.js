@@ -1,6 +1,6 @@
-/* global ValidatedMethod:true */
+import { check, Match } from 'meteor/check';
 
-ValidatedMethod = class ValidatedMethod {
+export class ValidatedMethod {
   constructor(options) {
     // Default to no mixins
     options.mixins = options.mixins || [];
@@ -39,10 +39,13 @@ ValidatedMethod = class ValidatedMethod {
       throwStubExceptions: true,
     };
 
-    options.applyOptions = _.extend({}, defaultApplyOptions, options.applyOptions);
+    options.applyOptions = {
+      ...defaultApplyOptions,
+      ...options.applyOptions
+    };
 
     // Attach all options to the ValidatedMethod instance
-    _.extend(this, options);
+    Object.assign(this, options);
 
     const method = this;
     this.connection.methods({
@@ -58,7 +61,7 @@ ValidatedMethod = class ValidatedMethod {
 
   call(args, callback) {
     // Accept calling with just a callback
-    if (_.isFunction(args)) {
+    if ( typeof args === 'function' ) {
       callback = args;
       args = {};
     }
@@ -77,9 +80,7 @@ ValidatedMethod = class ValidatedMethod {
     }
   }
 
-  _execute(methodInvocation, args) {
-    methodInvocation = methodInvocation || {};
-
+  _execute(methodInvocation = {}, args) {
     // Add `this.name` to reference the Method name
     methodInvocation.name = this.name;
 
@@ -96,12 +97,10 @@ perhaps you meant to throw an error?`);
 
 // Mixins get a chance to transform the arguments before they are passed to the actual Method
 function applyMixins(args, mixins) {
-  // You can pass nested arrays so that people can ship mixin packs
-  const flatMixins = _.flatten(mixins);
   // Save name of the method here, so we can attach it to potential error messages
-  const {name} = args;
+  const { name } = args;
 
-  flatMixins.forEach((mixin) => {
+  mixins.forEach((mixin) => {
     args = mixin(args);
 
     if(!Match.test(args, Object)) {
