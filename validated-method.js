@@ -8,9 +8,15 @@ export class ValidatedMethod {
     check(options.name, String);
     options = applyMixins(options, options.mixins);
 
-    // connection argument defaults to Meteor, which is where Methods are defined on client and
-    // server
-    options.connection = options.connection || Meteor;
+    if(options.connection) {
+      // Make sure we have a valid connection object
+      if(typeof options.connection !== 'object'
+      || !options.connection.methods) throw new Error('Invalid connection type');
+    } else {
+      // connection argument defaults to Meteor, which is where Methods are defined on client and
+      // server
+      options.connection = Meteor;
+    }
 
     // Allow validate: null shorthand for methods that take no arguments
     if (options.validate === null) {
@@ -25,7 +31,6 @@ export class ValidatedMethod {
       validate: Function,
       run: Function,
       mixins: [Function],
-      connection: Object,
       applyOptions: Object,
     }));
 
