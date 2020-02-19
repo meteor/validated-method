@@ -1,5 +1,10 @@
 # Change log
 
+## 1.2.0
+
+- Remove underscore and modernize
+- Add direct check for Connection object and remove the check from the check call.
+
 ## 1.1.0
 
 - Allow overriding default `Meteor.apply` options via `applyOptions` option. [#46](https://github.com/meteor/validated-method/pull/46)
