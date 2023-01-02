@@ -85,6 +85,10 @@ export class ValidatedMethod {
     }
   }
 
+  callAsync(args) {
+    return this.connection.applyAsync(this.name, [args], this.applyOptions);
+  }
+
   _execute(methodInvocation = {}, args) {
     // Add `this.name` to reference the Method name
     methodInvocation.name = this.name;
