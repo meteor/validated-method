@@ -72,6 +72,23 @@ const methodWithApplyOptions = new ValidatedMethod({
   }
 });
 
+const asyncMethod = new ValidatedMethod({
+  name: 'asyncMethod',
+  validate: new SimpleSchema({
+    param: { type: Number },
+  }).validator(),
+  async run({ param }) {
+    return new Promise(resolve => {
+		setTimeout(() => {
+			resolve(['result', 'result2', param]);
+		}, 1000);
+	})
+		.then(result => {
+			return result.join(',');
+		});
+  }
+});
+
 function schemaMixin(methodOptions) {
   methodOptions.validate = methodOptions.schema.validator();
   return methodOptions;
@@ -98,6 +115,14 @@ describe('mdg:method', () => {
         done();
       });
     });
+  });
+
+  it('allows methods to be called asynchronously', (done) => {
+    asyncMethod.callAsync({ param: 3000 })
+		.then(result => {
+		  assert.equal(result, 'result,result2,3000');
+		  done();
+		});
   });
 
 
