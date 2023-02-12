@@ -89,37 +89,42 @@ export class ValidatedMethod {
 		//taken from the callAsync method internals which will use applyAsync with a isFromCallAsync param
 		//which will flag methods as running on DDP
 		//reset current method invocation and mark it as running
-		DDP._CurrentMethodInvocation._set();
-		DDP._CurrentMethodInvocation._setCallAsyncMethodRunning(true);
+		if (Meteor.isClient) {
+			DDP._CurrentMethodInvocation._set();
+			DDP._CurrentMethodInvocation._setCallAsyncMethodRunning(true);
 
-		return new Promise((resolve, reject) => {
-			const clientResultOrThenable = this.connection.applyAsync(
-				this.name,
-				[args],
-				//ensure throwStubExceptions which we need in order
-				//to catch client exceptions and re-throw them as promise rejections
-				//mimic callAsync through isFromCallAsync
-				//merge with this.applyOptions
-				Object.assign(this.applyOptions, { throwStubExceptions: true, isFromCallAsync: true }),
-				(err, serverResult) => {
-					//set the current invocation running to false as soon as server returned its
-					//promise so that subsequent methods in .then's of the first method run in their
-					//own context instead of thinking they are a stub for the first method
-					//MethodOne.call(params)
-					//.then(() => MethodTwo.call())
-					//.catch(err => log(err));
+			return new Promise((resolve, reject) => {
+				const clientResultOrThenable = this.connection.applyAsync(
+					this.name,
+					[args],
+					//ensure throwStubExceptions which we need in order
+					//to catch client exceptions and re-throw them as promise rejections
+					//mimic callAsync through isFromCallAsync
+					//merge with this.applyOptions
+					Object.assign(this.applyOptions, { throwStubExceptions: true, isFromCallAsync: true }),
+					(err, serverResult) => {
+						//set the current invocation running to false as soon as server returned its
+						//promise so that subsequent methods in .then's of the first method run in their
+						//own context instead of thinking they are a stub for the first method
+						//MethodOne.call(params)
+						//.then(() => MethodTwo.call())
+						//.catch(err => log(err));
 
-					DDP._CurrentMethodInvocation._setCallAsyncMethodRunning(false);
+						DDP._CurrentMethodInvocation._setCallAsyncMethodRunning(false);
 
-					if (err) reject(err);
-					resolve(serverResult);
-				}
-			),
-			isThenable = clientResultOrThenable && typeof clientResultOrThenable.then === 'function';
+						if (err) reject(err);
+						resolve(serverResult);
+					}
+				),
+				isThenable = clientResultOrThenable && typeof clientResultOrThenable.then === 'function';
 
-			//catch exceptions on the stub and re-route them to the promise wrapper
-			if (isThenable) clientResultOrThenable.catch(err => reject(err));
-		});
+				//catch exceptions on the stub and re-route them to the promise wrapper
+				if (isThenable) clientResultOrThenable.catch(err => reject(err));
+			});
+		}
+
+		//when called from server, just return the promise as returned by the method
+		return this.connection.applyAsync(this.name, [args], this.applyOptions);
   }
 
   _execute(methodInvocation = {}, args) {
