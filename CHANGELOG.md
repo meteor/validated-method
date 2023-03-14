@@ -1,5 +1,10 @@
 # Change log
 
+## 1.3.0
+
+- Added `callAsync` as the counter part for `Meteor.callAsync` 
+more can be seen in the [PR](https://github.com/meteor/validated-method/pull/92)
+
 ## 1.2.0
 
 - Remove underscore and modernize

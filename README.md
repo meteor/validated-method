@@ -14,6 +14,11 @@ const method = new ValidatedMethod({
 
 // Method call
 method.call({ arg1, arg2 });
+
+// Method callAsync added in 1.3.0
+method.callAsync({ arg1, arg2 }); 
+//      ˆˆˆˆˆ not callback based, returns a Promise.
+
 ```
 
 This is a simple wrapper package for `Meteor.methods`. The need for such a package came
