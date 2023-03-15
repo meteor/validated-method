@@ -140,6 +140,23 @@ perhaps you meant to throw an error?`);
 
     return this.run.bind(methodInvocation)(args);
   }
+
+  _executeAsync(methodInvocation = {}, args) {
+	//Add `this.name` to reference the Method name
+	methodInvocation.name = this.name;
+
+	try {
+		const validateResult = this.validate.bind(methodInvocation)(args);
+
+		if (typeof validateResult !== 'undefined') {
+			throw new Error('Returning from validate doesn\'t do anything; Perhaps you meant to throw an error?');
+		}
+
+		return this.run.bind(methodInvocation)(args);
+	} catch (err) {
+		return Promise.reject(err);
+	}
+  }
 };
 
 // Mixins get a chance to transform the arguments before they are passed to the actual Method
