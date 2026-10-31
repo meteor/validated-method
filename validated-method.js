@@ -1,5 +1,10 @@
 import { check, Match } from 'meteor/check';
 
+// checked per call, so environments without async methods can be simulated in tests
+const supportsAsyncMethods = () =>
+    typeof Meteor.callAsync === 'function' &&
+    typeof Meteor.applyAsync === 'function';
+
 export class ValidatedMethod {
   constructor(options) {
     // Default to no mixins
@@ -86,6 +91,9 @@ export class ValidatedMethod {
   }
 
   callAsync(args) {
+    if (!supportsAsyncMethods()) {
+      throw new Error('Async methods are not supported in this version of Meteor');
+    }
 		//taken from the callAsync method internals which will use applyAsync with a isFromCallAsync param
 		//which will flag methods as running on DDP
 		//reset current method invocation and mark it as running
@@ -132,15 +140,31 @@ export class ValidatedMethod {
     methodInvocation.name = this.name;
 
     const validateResult = this.validate.bind(methodInvocation)(args);
-
-    if (typeof validateResult !== 'undefined') {
+    const boundFn = this.run.bind(methodInvocation);
+    const isUndefined = typeof validateResult === 'undefined';
+    const isPromiseLike = typeof validateResult?.then === 'function';
+    const fail = () => {
       throw new Error(`Returning from validate doesn't do anything; \
 perhaps you meant to throw an error?`);
+    };
+
+    if (!isUndefined) {
+      if (isPromiseLike) {
+        const runAsync = async () => {
+          const validateResultValue = await validateResult;
+          if (typeof validateResultValue !== 'undefined') {
+            fail();
+          }
+          return boundFn(args);
+        }
+        return runAsync();
+      }
+      fail();
     }
 
-    return this.run.bind(methodInvocation)(args);
+    return boundFn(args);
   }
-};
+}
 
 // Mixins get a chance to transform the arguments before they are passed to the actual Method
 function applyMixins(args, mixins) {

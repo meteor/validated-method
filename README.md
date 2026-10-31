@@ -343,6 +343,36 @@ FlowRouter.go('listsShow', { _id: listId });
 
 ### Running tests
 
+```shell
+npm ci
+npm run test # runs once
+npm run test:watch # reruns on changes
 ```
-meteor test-packages --driver-package practicalmeteor:mocha ./
+
+### Package test coverage
+
+Install the development tools and run the same package tests with manual
+[Istanbul instrumentation](https://github.com/istanbuljs/istanbuljs/tree/main/packages/istanbul-lib-instrument):
+
+```shell
+npm ci
+npm run test:coverage
 ```
+
+The runner instruments a temporary copy of `validated-method.js` before Meteor
+compiles it, then runs
+`meteor test-packages --once --driver-package meteortesting:mocha ./`.
+Only coverage runs select this copy; ordinary package consumers use the original
+source. Test-only Mocha hooks save counters in `.nyc_output/`. The runner merges
+the counters and writes `coverage/index.html`, `coverage/lcov.info`, and
+`coverage/coverage-final.json`, with locations referring to the original source.
+It preserves a failing test command's exit status and removes the generated source.
+Run only one coverage process at a time in this checkout.
+
+For browser coverage, configure the test driver's browser support (for example,
+`TEST_BROWSER_DRIVER=puppeteer npm run test:coverage` with Puppeteer available to
+the driver). The client hook awaits transfer of its counters to the test server
+before finishing. Without a browser, the runner explicitly reports server-only
+coverage; client branches remain uncovered. Reports are also generated after
+test failures if the hooks collected counters. Startup failures produce an error
+instead of an empty coverage report.

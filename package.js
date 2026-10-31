@@ -6,7 +6,7 @@ Package.describe({
 });
 
 Package.onUse(function (api) {
-  api.versionsFrom('1.7');
+  api.versionsFrom(['2.3', '3.0']);
 
   api.use([
     'ecmascript',
@@ -14,19 +14,23 @@ Package.onUse(function (api) {
     'ddp',
   ]);
 
-  api.mainModule('validated-method.js');
+  api.mainModule(process.env.VALIDATED_METHOD_COVERAGE
+    ? 'coverage-source/validated-method.js'
+    : 'validated-method.js');
   api.export('ValidatedMethod');
 });
 
 Package.onTest(function (api) {
   api.use([
     'ecmascript',
-    'practicalmeteor:mocha@2.4.5_6',
-    'practicalmeteor:chai@2.1.0_1',
-    'aldeed:simple-schema@1.5.4',
+    'meteortesting:mocha@2.0.0 || 3.0.0',
+    'aldeed:simple-schema@2.0.0 || 3.0.0', // modern support
     'mdg:validated-method',
     'random'
   ]);
 
+  if (process.env.VALIDATED_METHOD_COVERAGE) {
+    api.addFiles('coverage-support/collect.js');
+  }
   api.mainModule('validated-method-tests.js');
 });

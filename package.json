@@ -1,0 +1,17 @@
+{
+  "private": true,
+  "scripts": {
+    "test": "meteor test-packages --once --driver-package meteortesting:mocha ./",
+    "test:watch": "meteor test-packages --driver-package meteortesting:mocha ./",
+    "test:coverage": "node coverage-support/run.cjs",
+    "test:ci": "TEST_BROWSER_DRIVER=puppeteer npm run test:coverage"
+  },
+  "devDependencies": {
+    "chai": "^4.5.0",
+    "istanbul-lib-coverage": "3.2.2",
+    "istanbul-lib-instrument": "6.0.3",
+    "istanbul-lib-report": "3.0.1",
+    "istanbul-reports": "3.2.0",
+    "simpl-schema": "^1.13.1"
+  }
+}
